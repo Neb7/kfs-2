@@ -23,7 +23,8 @@ SRC			= idt.c \
 			  vga.c \
 			  kprintf.c \
 			  kprintk.c \
-			  pic.c
+			  pic.c \
+			  gdt.c
 
 SRCS_DIR_LIBFT	= libft/
 SRC_LIBFT	= ft_atoi.c \

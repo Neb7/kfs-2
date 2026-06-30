@@ -11,6 +11,7 @@ section .bss
 align 16
 stack_bottom:
     resb 16384
+global stack_top
 stack_top:
 
 section .text
@@ -23,6 +24,9 @@ extern keyboard_handler
 start:
     cli
     mov esp, stack_top
+	xor ebp, ebp      ; EBP = 0
+	push ebp          ; empile 0 sur la stack
+	mov ebp, esp      ; EBP pointe sur ce 0
 
     call kernel_main
 

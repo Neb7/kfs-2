@@ -6,12 +6,14 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr > +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 15:25:41 by benpicar          #+#    #+#             */
-/*   Updated: 2026/06/30 15:20:18 by benpicar         ###   ########.fr       */
+/*   Updated: 2026/06/30 15:58:16 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "kernel.h"
 #include "vga.h"
+#include "gdt.h"
+#include "kprintk.h"
 
 uint16_t	*vga = (uint16_t*)0xB8000;
 
@@ -21,6 +23,27 @@ char scancode_map[128] = {
 	'a','s','d','f','g','h','j','k','l',';','\'','`', 0,'\\',
 	'z','x','c','v','b','n','m',',','.','/', 0, 0, 0,' '
 };
+
+void	delete_handler()
+{
+	t_vga *vga_cur = &g_screens[g_cur];
+
+	if (vga_cur->cursor_x > 0)
+	{
+		vga_cur->cursor_x--;
+		putchar(' ');  // overwrite the character with a space
+		vga_cur->cursor_x--;
+	}
+	else if (vga_cur->cursor_y > 0)
+	{
+		vga_cur->cursor_y--;
+		vga_cur->cursor_x = 79;
+		putchar(' ');  // overwrite the character with a space
+		vga_cur->cursor_y--;
+		vga_cur->cursor_x = 79;
+	}
+	update_cursor();
+}
 
 /**
  * @brief	Handle keyboard interrupts
@@ -33,6 +56,8 @@ void keyboard_handler()
 	if (scancode & 0x80) {
 		// key released ignored
 	}
+	else if (scancode == 0x53) // Delete key
+		delete_handler();
 	else if (g_cur != 0 && scancode == 0x3B) // F1
 		switch_screen(0);
 	else if (g_cur != 1 && scancode == 0x3C) // F2
@@ -117,9 +142,10 @@ void putchar(char c)
  */
 void kernel_main(void)
 {
+	gdt_init();
 	idt_init();
 	pic_init();
-	idt_set_gate(33, (uint32_t)keyboard_stub, 0x10, 0x8E);
+	idt_set_gate(33, (uint32_t)keyboard_stub, 0x08, 0x8E);
 
 	__asm__ volatile ("sti");  // activate interrupts
 
@@ -131,8 +157,8 @@ void kernel_main(void)
 	ft_memset_short(g_screens[1].lines, 0x24 << 8 | ' '
 			, sizeof(g_screens[1].lines));
 	enable_cursor(0, 15);
-	putchar('4');
-	putchar('2');
+	kprintf("42\nGDT initialisee a 0x%x\n", GDT_ADDR);
+    print_stack(10);   // affiche la stack kernel au boot
 	while (1)
 	{}
 }

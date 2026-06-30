@@ -2,6 +2,12 @@ ENTRY(start)
 
 SECTIONS
 {
+	/* GDT fixée à 0x800 (en dessous du premier MB, hors BIOS) */
+	.gdt 0x00000800 :
+    {
+        *(.gdt)
+    }
+
     . = 1M;
 
     .text :
@@ -23,5 +29,6 @@ SECTIONS
     .bss :
     {
         *(.bss)
+		*(COMMON)
     }
 }

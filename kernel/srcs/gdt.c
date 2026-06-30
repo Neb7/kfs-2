@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr > +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 14:55:44 by benpicar          #+#    #+#             */
-/*   Updated: 2026/06/30 14:55:46 by benpicar         ###   ########.fr       */
+/*   Updated: 2026/06/30 15:45:36 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "kernel.h"
 
 // The GDT will be placed by the linker at GDT_ADDR (0x800)
-static t_gdt_entry  *gdt = (t_gdt_entry *)GDT_ADDR;
+static t_gdt_entry gdt[GDT_COUNT + 1] __attribute__((section(".gdt")));
 static t_gdt_ptr    gdtp;
 
 /*
