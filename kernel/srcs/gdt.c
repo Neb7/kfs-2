@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gdt.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benpicar <benpicar@student.42mulhouse.fr > +#+  +:+       +#+        */
+/*   By: vsyutkin <vsyutkin@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 14:55:44 by benpicar          #+#    #+#             */
-/*   Updated: 2026/06/30 15:45:36 by benpicar         ###   ########.fr       */
+/*   Updated: 2026/06/30 16:41:55 by vsyutkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void gdt_init(void)
     // User Stack — base 0, limit 10MB, ring 3, data
     gdt_set_entry(GDT_USTACK, 0, 0x009FFFFF, 0xF2, 0xC);
 
-    gdtp.limit = (sizeof(t_gdt_entry) * GDT_COUNT) - 1;
+    gdtp.limit = (sizeof(t_gdt_entry) * (GDT_COUNT) + 1) - 1;
     gdtp.base  = GDT_ADDR;
 
     // Load the GDT and reload segments (see boot.asm: gdt_flush)

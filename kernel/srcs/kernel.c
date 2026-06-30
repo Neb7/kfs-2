@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kernel.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benpicar <benpicar@student.42mulhouse.fr > +#+  +:+       +#+        */
+/*   By: vsyutkin <vsyutkin@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 15:25:41 by benpicar          #+#    #+#             */
-/*   Updated: 2026/06/30 15:58:16 by benpicar         ###   ########.fr       */
+/*   Updated: 2026/06/30 17:06:55 by vsyutkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,28 @@ char scancode_map[128] = {
 
 void	delete_handler()
 {
-	t_vga *vga_cur = &g_screens[g_cur];
+	t_vga	*vga_cur = &g_screens[g_cur];
 
 	if (vga_cur->cursor_x > 0)
-	{
 		vga_cur->cursor_x--;
-		putchar(' ');  // overwrite the character with a space
-		vga_cur->cursor_x--;
-	}
 	else if (vga_cur->cursor_y > 0)
 	{
 		vga_cur->cursor_y--;
 		vga_cur->cursor_x = 79;
-		putchar(' ');  // overwrite the character with a space
-		vga_cur->cursor_y--;
-		vga_cur->cursor_x = 79;
+		while (vga_cur->cursor_x > 1
+				&& vga_cur->lines[vga_cur->cursor_y][vga_cur->cursor_x - 1]
+					== ((vga_cur->color << 8) | ' '))
+		{
+			vga_cur->cursor_x--;
+		}
+		if (vga_cur->lines[vga_cur->cursor_y][vga_cur->cursor_x - 1]
+				== ((vga_cur->color << 8) | ' '))
+			vga_cur->cursor_x--;
 	}
+	else
+		return ;
+	vga[vga_cur->cursor_y * 80 + vga_cur->cursor_x] = (vga_cur->color << 8) | ' ';
+	vga_cur->lines[vga_cur->cursor_y][vga_cur->cursor_x] = (vga_cur->color << 8) | ' ';
 	update_cursor();
 }
 
@@ -56,7 +62,7 @@ void keyboard_handler()
 	if (scancode & 0x80) {
 		// key released ignored
 	}
-	else if (scancode == 0x53) // Delete key
+	else if (scancode == 0x0E) // Backspace
 		delete_handler();
 	else if (g_cur != 0 && scancode == 0x3B) // F1
 		switch_screen(0);
