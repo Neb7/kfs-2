@@ -22,6 +22,7 @@ SRC			= idt.c \
 			  kernel.c \
 			  vga.c \
 			  kprintf.c \
+			  kprintk.c \
 			  pic.c
 
 SRCS_DIR_LIBFT	= libft/

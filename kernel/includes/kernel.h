@@ -46,6 +46,7 @@ void enable_cursor(uint8_t top, uint8_t bottom);
 void update_cursor();
 extern void keyboard_stub(void);
 void putchar(char c);
+int  vkprintf(const char *fmt, __builtin_va_list args);
 int  kprintf(const char *fmt, ...);
 void kernel_main(void);
 

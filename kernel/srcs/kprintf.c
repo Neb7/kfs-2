@@ -165,15 +165,13 @@ static int	kputarg(char c, va_list args)
 	return (kputchar_k('%'));
 }
 
-int	kprintf(const char *s, ...)
+int	vkprintf(const char *s, va_list args)
 {
-	int		cursor;
-	va_list	args;
-	int		result;
-	int		buffer;
+	int	cursor;
+	int	result;
+	int	buffer;
 
 	cursor = 0;
-	va_start(args, s);
 	result = 0;
 	while (*(s + cursor))
 	{
@@ -186,6 +184,16 @@ int	kprintf(const char *s, ...)
 		result += buffer;
 		cursor++;
 	}
+	return (result);
+}
+
+int	kprintf(const char *s, ...)
+{
+	va_list	args;
+	int		result;
+
+	va_start(args, s);
+	result = vkprintf(s, args);
 	va_end(args);
 	return (result);
 }
