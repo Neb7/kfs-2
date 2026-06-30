@@ -31,7 +31,7 @@ start:
     jmp .loop
 
 keyboard_stub:
-    pusha              ; sauvegarde eax, ecx, edx, ebx, esp, ebp, esi, edi
+    pusha              ; save eax, ecx, edx, ebx, esp, ebp, esi, edi
     call keyboard_handler
-    popa               ; restaure les registres
-    iret               ; retour d'interruption (pas ret !)
+    popa               ; restore registries
+    iret               ; return of interrupt (not ret !)

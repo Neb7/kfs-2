@@ -49,8 +49,7 @@ SRC_LIBFT	= ft_atoi.c \
 			  ft_toupper.c
 
 SRC_A		= boot.asm
-# SRC_C		:= $(wildcard kernel/srcs/*.c) $(wildcard kernel/libft/*.c)
-# SRC_ASM		:= $(wildcard kernel/*.asm)
+
 SRC_C		= $(addprefix $(SRCS_DIR_C), $(SRC))
 SRC_C		+= $(addprefix $(SRCS_DIR_LIBFT), $(SRC_LIBFT))
 
@@ -73,15 +72,11 @@ $(NAME): $(OBJ)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 # compile .c -> .o
-# %.o: %.c
-# 	$(CC) $(CFLAGS) -c $< -o $@
 ${OBJS_DIR}%.o: ${SRCS_DIR}%.c | ${OBJS_DIR}
 				@mkdir -p $(dir $@)
 				@${CC} ${CFLAGS} -c $< -o $@
 
 # compile .asm -> .o
-# %.o: %.asm
-# 	$(ASM) $(ASMFLAGS) $< -o $@
 ${OBJS_DIR}%.o: ${SRCS_DIR}%.asm | ${OBJS_DIR}
 				@mkdir -p $(dir $@)
 				@${ASM} ${ASMFLAGS} $< -o $@

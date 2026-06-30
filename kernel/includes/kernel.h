@@ -16,11 +16,11 @@ extern char scancode_map[128];
 extern uint16_t *vga;
 
 struct idt_entry {
-	uint16_t base_low;   // bits 0-15 de l'adresse du handler
-	uint16_t selector;   // segment code (0x08 en général)
-	uint8_t  zero;	   // toujours 0
-	uint8_t  flags;	  // type + privilège
-	uint16_t base_high;  // bits 16-31 de l'adresse du handler
+	uint16_t base_low;   // bits 0-15 of the handler address
+	uint16_t selector;   // code segment (usually 0x08) 0x10
+	uint8_t  zero;	   // always 0
+	uint8_t  flags;	  // type + privilege
+	uint16_t base_high;  // bits 16-31 of the handler address
 } __attribute__((packed));
 
 struct idt_ptr

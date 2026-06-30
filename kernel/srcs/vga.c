@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vga.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benpicar <benpicar@student.42mulhouse.fr > +#+  +:+       +#+        */
+/*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 15:22:40 by benpicar          #+#    #+#             */
-/*   Updated: 2026/06/28 17:55:51 by benpicar         ###   ########.fr       */
+/*   Updated: 2026/06/29 15:28:13 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	scroll()
 	ft_memmove(vga_cur->lines[0], vga_cur->lines[1], sizeof(vga_cur->lines)
 		- sizeof(vga_cur->lines[0]));
 	vga_cur->cursor_y--;
-	// for (int i = 0; i < 80; i++)
-	// 	vga_cur->lines[24][i] = ((uint16_t)vga_cur->color << 8) | ' ';
 	ft_memset_short(vga_cur->lines[24], (vga_cur->color << 8) | ' '
 		, sizeof(vga_cur->lines[24]));
 	ft_memcpy(vga, g_screens[g_cur].lines, sizeof(g_screens[g_cur].lines));
