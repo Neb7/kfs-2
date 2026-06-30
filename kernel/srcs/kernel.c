@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr > +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 15:25:41 by benpicar          #+#    #+#             */
-/*   Updated: 2026/06/30 15:09:06 by benpicar         ###   ########.fr       */
+/*   Updated: 2026/06/30 15:20:18 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void kernel_main(void)
 {
 	idt_init();
 	pic_init();
-	idt_set_gate(33, (uint32_t)keyboard_stub, 0x08, 0x8E);
+	idt_set_gate(33, (uint32_t)keyboard_stub, 0x10, 0x8E);
 
 	__asm__ volatile ("sti");  // activate interrupts
 
