@@ -102,18 +102,18 @@ void print_stack(uint32_t max_frames)
 
     __asm__ volatile ("mov %%ebp, %0" : "=r"(ebp));
 
-    kprintf("=== Kernel Stack Trace ===\n");
+    kprintk("=== Kernel Stack Trace ===\n");
     frame = 0;
     while (ebp && frame < max_frames)
     {
         uint32_t ret_addr = *(ebp + 1);
         if (ret_addr == 0)
             break;
-        kprintf("  [%u] EBP=0x%x  RET=0x%x\n", frame, (uint32_t)ebp, ret_addr);
+        kprintk("  [%u] EBP=0x%x  RET=0x%x\n", frame, (uint32_t)ebp, ret_addr);
         ebp = (uint32_t *)(*ebp);
         frame++;
     }
     if (frame == 0)
-        kprintf("  (empty stack or unreliable EBP)\n");
-    kprintf("==========================\n");
+        kprintk("  (empty stack or unreliable EBP)\n");
+    kprintk("==========================\n");
 }

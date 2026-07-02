@@ -6,7 +6,7 @@
 /*   By: vsyutkin <vsyutkin@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 15:25:41 by benpicar          #+#    #+#             */
-/*   Updated: 2026/06/30 17:06:55 by vsyutkin         ###   ########.fr       */
+/*   Updated: 2026/07/02 10:32:10 by vsyutkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "vga.h"
 #include "gdt.h"
 #include "kprintk.h"
+#include "shell.h"
 
 uint16_t	*vga = (uint16_t*)0xB8000;
 
@@ -64,6 +65,12 @@ void keyboard_handler()
 	}
 	else if (scancode == 0x0E) // Backspace
 		delete_handler();
+	else if (scancode == 0x1C) // Enter
+	{
+		int saved_y = g_screens[g_cur].cursor_y;
+		putchar('\n');
+		shell_exec(saved_y);
+	}
 	else if (g_cur != 0 && scancode == 0x3B) // F1
 		switch_screen(0);
 	else if (g_cur != 1 && scancode == 0x3C) // F2
@@ -72,9 +79,7 @@ void keyboard_handler()
 	{
 		c = scancode_map[scancode];
 		if (c)
-		{
 			putchar(c);
-		}
 	}
 
 	outb(0x20, 0x20);  // EOI — end of interuption PIC
@@ -162,7 +167,7 @@ void kernel_main(void)
 			, sizeof(g_screens[1].lines));
 	enable_cursor(0, 15);
 	__asm__ volatile ("sti");  // activate interrupts after full init
-	kprintf("42\nGDT initialisee a 0x%x\n", GDT_ADDR);
+	kprintk(KERN_INFO "42\nGDT initialisee a 0x%x\n", GDT_ADDR);
     print_stack(10);   // affiche la stack kernel au boot
 	while (1)
 	{}
