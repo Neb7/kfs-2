@@ -71,7 +71,7 @@ void gdt_init(void)
     // User Stack — base 0, limit 10MB, ring 3, data
     gdt_set_entry(GDT_USTACK, 0, 0x009FFFFF, 0xF2, 0xC);
 
-    gdtp.limit = (sizeof(t_gdt_entry) * (GDT_COUNT) + 1) - 1;
+    gdtp.limit = (sizeof(t_gdt_entry) * (GDT_COUNT + 1)) - 1;
     gdtp.base  = GDT_ADDR;
 
     // Load the GDT and reload segments (see boot.asm: gdt_flush)

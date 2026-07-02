@@ -153,8 +153,6 @@ void kernel_main(void)
 	pic_init();
 	idt_set_gate(33, (uint32_t)keyboard_stub, 0x08, 0x8E);
 
-	__asm__ volatile ("sti");  // activate interrupts
-
 	ft_bzero(g_screens, sizeof(g_screens));
 	g_screens[0].color = 0x0F;
 	g_screens[1].color = 0x24;
@@ -163,6 +161,7 @@ void kernel_main(void)
 	ft_memset_short(g_screens[1].lines, 0x24 << 8 | ' '
 			, sizeof(g_screens[1].lines));
 	enable_cursor(0, 15);
+	__asm__ volatile ("sti");  // activate interrupts after full init
 	kprintf("42\nGDT initialisee a 0x%x\n", GDT_ADDR);
     print_stack(10);   // affiche la stack kernel au boot
 	while (1)
